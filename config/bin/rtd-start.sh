@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-curl -XPUT 'http://elasticsearch:9200/readthedocs/'
+curl -XPUT 'http://rtd-elk:9200/readthedocs/'
 
 cd /app/readthedocs
 ln -s ../manage.py .

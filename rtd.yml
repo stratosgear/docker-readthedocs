@@ -1,0 +1,70 @@
+version: '2'
+
+services:
+
+  rtd-db:
+    image: sameersbn/postgresql:9.1-1
+    env_file: postgres.env
+    container_name: rtd-db
+#    environment:
+#      - DB_USER=docs
+#      - DB_PASS=secretpassword
+#      - DB_NAME=docs
+    volumes:
+      - /data/readthedocs/postgres:/var/lib/postgresql
+    networks:
+      - rtd-network
+
+  rtd-app:
+    container_name: rtd-app
+    build: .
+    ports:
+      - "10000:8000"
+    expose: 
+      - 10000
+    links:
+      - rtd-db
+      - rtd-elk
+      - rtd-redis
+    volumes:
+      - /data/readthedocs/rtd_builds:/app/user_builds
+    env_file: postgres.env
+    environment:
+      - "VIRTUAL_HOST=docs.hypervasis.com"
+      - "VIRTUAL_PORT=10000"
+      - "LETSENCRYPT_HOST=docs.hypervasis.com"
+      - "LETSENCRYPT_EMAIL=stratosgear@gmail.com"
+    networks:
+      - rtd-network
+      - nginxproxy-network
+
+
+  rtd-elk:
+    image: sebp/elk:532
+    container_name: rtd-elk
+    ports:
+      - "9200:9200"
+    volumes:
+      - /data/readthedocs/elk/elasticsearch:/var/lib/elasticsearch
+    environment:
+      - LOGSTASH_START=0
+      - KIBANA_START=0
+    networks:
+      - rtd-network
+
+
+  rtd-redis:
+    image: redis
+    container_name: rtd-redis
+    networks:
+      - rtd-network
+
+
+networks:
+    rtd-network:
+        external:
+            name: rtd-network
+    nginxproxy-network:
+        external:
+            name: nginxproxy-network
+
