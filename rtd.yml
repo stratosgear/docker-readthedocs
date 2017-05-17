@@ -18,10 +18,10 @@ services:
   rtd-app:
     container_name: rtd-app
     build: .
-    ports:
-      - "10000:8000"
-    expose: 
-      - 10000
+#    ports:
+#      - "10000:8000"
+#    expose: 
+#      - 10000
     links:
       - rtd-db
       - rtd-elk
@@ -31,7 +31,7 @@ services:
     env_file: postgres.env
     environment:
       - "VIRTUAL_HOST=docs.hypervasis.com"
-      - "VIRTUAL_PORT=10000"
+#      - "VIRTUAL_PORT=10000"
       - "LETSENCRYPT_HOST=docs.hypervasis.com"
       - "LETSENCRYPT_EMAIL=stratosgear@gmail.com"
     networks:

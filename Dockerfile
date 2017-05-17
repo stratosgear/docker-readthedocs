@@ -39,11 +39,13 @@ RUN virtualenv /venv
 RUN adduser --gecos 'py' --disabled-password py
 
 RUN mkdir -p $APPDIR && cd /tmp && \
-    wget -q --no-check-certificate https://github.com/rtfd/readthedocs.org/archive/master.zip 
+    wget -q --no-check-certificate https://github.com/rtfd/readthedocs.org/archive/master.zip
 
 ADD config /
 
 RUN /bin/rtd-install.sh
+
+COPY local_settings.py /app/readthedocs/settings/
 
 # Docker config
 EXPOSE 8000

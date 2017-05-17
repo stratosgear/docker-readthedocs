@@ -18,7 +18,7 @@ ES_HOSTS = ['rtd-elk:9200']
 REDIS = {
     'host': 'rtd-redis',
     'port': 6379,
-    'db': 0,
+    'db': 0
 }
 BROKER_URL = 'redis://rtd-redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://rtd-redis:6379/0'
